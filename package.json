@@ -9,7 +9,7 @@
   "license": "ISC",
   "description": ""
   ,
-  "workspaces": = [
+  "workspaces": [
 	  "packages/*"
   ]
 }
