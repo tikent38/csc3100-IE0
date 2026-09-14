@@ -59,27 +59,40 @@ app.get("/users/:job/:name", (req, res) => {
 app.delete("/users/:id", (req, res) => {
   const id = req.params["id"]; //or req.params.id
   const result = users.users_list.findIndex((user) => user.id === id);
-  if (result === undefined) {
+  if (result === -1) {
     res.status(404).send("Resource not found.");
   } else {
     users.users_list.splice(result, 1)[0];
+    return res.status(204).send();
   }
+
 });
 
-const addUser = (user) => {
-  users["users_list"].push(user);
-  return user;
+const addUser = (user) => { // adds a user with ID now
+  const userWithId = {
+    ...user,
+    id: generateId(),
+  };
+
+  users["users_list"].push(userWithId);
+
+  return userWithId;
 };
 
 app.post("/users", (req, res) => {
-  const userToAdd = req.body;
-  addUser(userToAdd);
-  res.send();
+  const addedUser = addUser(req.body); // add the user now with its id
+  res.status(201).send(addedUser); // give it the status 201
 });
+
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
 });
+
+const generateId = () => {
+  return Math.random().toString(36).slice(2, 10);
+};
+
 
 const users = {
   users_list: [

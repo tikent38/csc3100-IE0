@@ -9,18 +9,47 @@ function MyApp() {
   const [characters, setCharacters] = useState([]);
 
   function removeOneCharacter(index) {
-    const updated = characters.filter((character, i) => {
-      return i !== index;
-    });
-    setCharacters(updated);
+    const id = characters[index].id; // find the id to remove
+
+    fetch(`http://localhost:8000/users/${id}`, {
+      method: "DELETE",
+    })
+      .then((res) => {
+        if (res.status !== 204) { // 204 means removed successfully
+          throw new Error("User was not deleted");
+        }
+
+        setCharacters((current) => // remove that chartter
+          current.filter((character) => character.id !== id)
+        );
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
+
+
+
+
+
   function updateList(person) {
     postUser(person)
-    .then(() => setCharacters([...characters, person]))
+    .then((res) => { // check to make suer 201 status returned
+      if (res.status !== 201) {
+        throw new Error("User was not created");
+      }
+
+      return res.json();
+    })
+
+    .then((newUser) => {
+      setCharacters((current) => [...current, newUser]);
+    })
     .catch((error) => {
       console.log(error);
     });
   }
+
 
   function fetchUsers() {
   const promise = fetch("http://localhost:8000/users");
