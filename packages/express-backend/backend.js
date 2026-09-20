@@ -90,7 +90,7 @@ app.listen(port, () => {
 });
 
 const generateId = () => {
-  return Math.random().toString(36).slice(2, 10);
+  return Math.random().toString().slice(2, 10);
 };
 
 

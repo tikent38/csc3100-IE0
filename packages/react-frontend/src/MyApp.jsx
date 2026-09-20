@@ -9,7 +9,7 @@ function MyApp() {
   const [characters, setCharacters] = useState([]);
 
   function removeOneCharacter(index) {
-    const id = characters[index].id; // find the id to remove
+    const id = characters[index]._id; // find the id to remove
 
     fetch(`http://localhost:8000/users/${id}`, {
       method: "DELETE",
@@ -20,7 +20,7 @@ function MyApp() {
         }
 
         setCharacters((current) => // remove that chartter
-          current.filter((character) => character.id !== id)
+          current.filter((character) => character._id !== id)
         );
       })
       .catch((error) => {
@@ -65,7 +65,7 @@ useEffect(() => {
 }, []);
 
 function postUser(person) {
-  const promise = fetch("Http://localhost:8000/users", {
+  const promise = fetch("http://localhost:8000/users", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
